@@ -8,7 +8,7 @@ const { checkBody } = require('../modules/checkBody');
 
 /* POST route pour inscripton */
 router.post('/signup', function(req, res) {
-  if (!checkBody(req.body, ['username', 'password', 'fisrtname'])) {
+  if (!checkBody(req.body, ['username', 'password', 'firstname'])) {
     res.json({ result: false, error: 'Missing or empty fields' });
   } else {
   User.findOne({username: req.body.username})
