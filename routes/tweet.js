@@ -1,6 +1,6 @@
 var express = require("express");
-var router = express.Router();
 const Tweet = require("../models/tweet");
+var router = express.Router();
 const { checkBody } = require("../modules/checkBody");
 
 /* POST pour poster un tweet*/
@@ -9,6 +9,8 @@ router.post("/", function (req, res) {
     res.json({ result: false, error: "Missing fields" });
   } else {
     newTweet = new Tweet({
+      username: req.body.username,
+      firstname: req.body.firstname,
       tweet: req.body.tweet,
       token: req.body.token,
     });
@@ -17,5 +19,13 @@ router.post("/", function (req, res) {
     });
   }
 });
+
+/* POST pour poster un tweet*/
+router.get("/allTweets", function (req, res) {
+  Tweet.find().then(data => {
+    res.json({ allTweet: data });
+    });
+  });
+
 
 module.exports = router;
