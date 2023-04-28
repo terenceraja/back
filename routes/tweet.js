@@ -27,5 +27,19 @@ router.get("/allTweets", function (req, res) {
     });
   });
 
+  /* DELETE pour poster un tweet*/
+router.delete('/delete', (req, res) => {
+  Tweet.deleteOne({tweet: req.body.tweet}, {token: req.body.token})
+  .then(data => {
+    if (data.deletedCount > 0){
+      Tweet.findOne({tweet: req.body.tweet}, {token: req.body.token})
+      .then(data => {
+        res.json({result : true , message: 'You have sent this tweet in space !' });
+      })
+
+    } else {
+    res.json({ result : false, message: 'No tweets deleted' });
+  }})
+});
 
 module.exports = router;
