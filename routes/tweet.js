@@ -22,24 +22,30 @@ router.post("/", function (req, res) {
 
 /* POST pour poster un tweet*/
 router.get("/allTweets", function (req, res) {
-  Tweet.find().then(data => {
+  Tweet.find().then((data) => {
     res.json({ allTweet: data });
-    });
   });
+});
 
-  /* DELETE pour poster un tweet*/
-router.delete('/delete', (req, res) => {
-  Tweet.deleteOne({tweet: req.body.tweet}, {token: req.body.token})
-  .then(data => {
-    if (data.deletedCount > 0){
-      Tweet.findOne({tweet: req.body.tweet}, {token: req.body.token})
-      .then(data => {
-        res.json({result : true , message: 'You have sent this tweet in space !' });
-      })
-
+/* DELETE pour poster un tweet*/
+router.delete("/delete", (req, res) => {
+  Tweet.findById(req.body.id_tweet).then((data) => {
+    console.log(data);
+    if (data.token === req.body.token) {
+      Tweet.deleteOne({ _id: req.body.id_tweet }).then((data) => {
+        if (data.deletedCount > 0) {
+          res.json({
+            result: true,
+            message: "You have sent this tweet in space !",
+          });
+        } else {
+          res.json({ result: false, message: "No tweets deleted" });
+        }
+      });
     } else {
-    res.json({ result : false, message: 'No tweets deleted' });
-  }})
+      // N'a pas le droit
+    }
+  });
 });
 
 module.exports = router;
